@@ -1,9 +1,24 @@
-name: probe-caller
+name: crawl
+
+# A shard: one of N repos that all pull work from the same queue. It holds no
+# logic of its own — it calls the reusable worker in the main repo. The reason
+# for separate repos is purely GitHub: concurrency groups are per repo, so two
+# dispatches in one repo would evict each other.
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "23 */2 * * *"
+
+concurrency:
+  group: crawl-w2
+  cancel-in-progress: false
+
 jobs:
-  call:
-    uses: samarian5/arbitrage-scan/.github/workflows/hello3.yml@main
+  crawl:
+    uses: samarian5/arbitrage-scan/.github/workflows/crawl-slice.yml@main
     with:
       slot: w2
       slices: 10
+    secrets:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
