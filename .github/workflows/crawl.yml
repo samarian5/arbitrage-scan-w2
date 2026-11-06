@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   call:
-    uses: samarian5/arbitrage-scan/.github/workflows/hello.yml@main
+    uses: samarian5/arbitrage-scan/.github/workflows/hello2.yml@main
     with:
       slot: w2
+      slices: 10
