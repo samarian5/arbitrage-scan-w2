@@ -1,0 +1,9 @@
+name: probe-hello5
+on:
+  workflow_dispatch:
+jobs:
+  call:
+    uses: samarian5/arbitrage-scan/.github/workflows/hello5.yml@main
+    with:
+      slot: w2
+      slices: 10
