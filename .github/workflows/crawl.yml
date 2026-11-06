@@ -1,10 +1,24 @@
-name: inherit-test
+name: crawl
+
+# A shard: one of N repos pulling from the same Postgres queue. No logic here —
+# it calls the reusable worker in the main repo. Separate repos exist purely
+# because GitHub concurrency groups are per repo: two dispatches in one repo
+# would evict each other.
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "23 */2 * * *"
+
+concurrency:
+  group: crawl-w2
+  cancel-in-progress: false
+
 jobs:
-  call:
+  crawl:
     uses: samarian5/arbitrage-scan/.github/workflows/crawl-slice.yml@main
     with:
       slot: w2
-      slices: 1
+      slices: 10
+    # `inherit`, not an explicit map: a caller that names secrets explicitly is
+    # rejected at validation (0 jobs, no check-run) even when they exist.
     secrets: inherit
