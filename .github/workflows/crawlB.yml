@@ -1,9 +1,6 @@
 name: B-schedule
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: "23 */2 * * *"
-jobs:
+  workflow_dispatch:jobs:
   call:
     uses: samarian5/arbitrage-scan/.github/workflows/crawl-slice.yml@main
     with: {slot: w2, slices: 1}
